@@ -1,0 +1,6 @@
+setemeanalysis("propagation sweep",1);
+setemeanalysis("parameter","group span 2");
+setemeanalysis("start",200e-6);
+setemeanalysis("stop",320e-6);
+setemeanalysis("number of points",21);
+emesweep("propagation sweep");

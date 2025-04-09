@@ -1,0 +1,341 @@
+deleteall;
+if (materialexists("my_SiN")){deletematerial("my_SiN");}
+
+
+#######################################################################
+# add materials
+#######################################################################
+# user defined materials
+data = readdata("my_own_SiN.txt");
+lam = data(:,1);
+n = data(:,2);
+k = data(:,3);
+# convert the data from index into eps
+e_r=n*n-k*k; # real part of relative permittivity
+e_i=2*n*k; # imaginary part of relative permittivity
+e_rel=e_r+k*1i;# create example relative permittivity vector
+# convert lambda into f
+nm=10^-9;
+lambda = lam*nm;
+f=c/lambda; 
+sampledData = [f,e_rel]; # collect f and eps in one matrix
+mymaterial = addmaterial("Sampled data");
+setmaterial(mymaterial, "name", "my_SiN");
+setmaterial("my_SiN", "max coefficients",6); # set the number of coefficients
+setmaterial("my_SiN","sampled data",sampledData); # load the sampled data matrix
+setmaterial("my_SiN","color", [0.2; 0.6; 0.8; 0.3]);
+############### Define the structure ###############
+# simplify variable names by removing spaces
+
+margin = 0.455e-6;
+coupler_length = 300e-6;
+separation = 4.1e-6;
+taper_length = 30e-6;
+taper_width = 2.9e-6;
+waveguide_width = 1e-6;
+z_span = 0.4e-6;
+waveguide_length = 1e-6;
+
+
+add_y =10e-6;
+coupler_width = separation*3+margin*2+taper_width;
+print(coupler_width);
+# add MMI coupling region
+addrect;
+set("name","MMI_core");
+set("material","my_SiN");
+set("x",0);
+set("x span",coupler_length);
+set("y",0);
+set("y span",coupler_width);
+set("z",0);
+set("z span",z_span);
+
+# add tapered regions for input ports
+# input1
+addpoly;
+set("name","input1");
+set("material","my_SiN");
+set("x",0);
+set("y",0);
+set("z",0);
+set("z span",z_span);
+x= [-coupler_length/2-taper_length; -coupler_length/2; -coupler_length/2; -coupler_length/2-taper_length];
+y= [waveguide_width/2; taper_width/2; -taper_width/2; -waveguide_width/2]+ separation*1.5;
+V=[x,y];
+set("vertices",V);
+
+# input2
+addpoly;
+set("name","input2");
+set("material","my_SiN");
+set("x",0);
+set("y",0);
+set("z",0);
+set("z span",z_span);
+x= [-coupler_length/2-taper_length; -coupler_length/2; -coupler_length/2; -coupler_length/2-taper_length];
+y= [waveguide_width/2; taper_width/2; -taper_width/2; -waveguide_width/2]+ separation*0.5;
+V=[x,y];
+set("vertices",V);
+
+# input3
+addpoly;
+set("name","input3");
+set("material","my_SiN");
+set("x",0);
+set("y",0);
+set("z",0);
+set("z span",z_span);
+x= [-coupler_length/2-taper_length; -coupler_length/2; -coupler_length/2; -coupler_length/2-taper_length];
+y= [waveguide_width/2; taper_width/2; -taper_width/2; -waveguide_width/2]- separation*0.5;
+V=[x,y];
+set("vertices",V);
+
+## input4
+addpoly;
+set("name","input4");
+set("material","my_SiN");
+set("x",0);
+set("y",0);
+set("z",0);
+set("z span",z_span);
+x= [-coupler_length/2-taper_length; -coupler_length/2; -coupler_length/2; -coupler_length/2-taper_length];
+y= [waveguide_width/2; taper_width/2; -taper_width/2; -waveguide_width/2]- separation*1.5;
+V=[x,y];
+set("vertices",V);
+
+# add tapered regions for output ports
+# output 1
+addpoly;
+set("name","output1");
+set("material","my_SiN");
+set("x",0);
+set("y",0);
+set("z",0);
+set("z span",z_span);
+x= [coupler_length/2+taper_length; coupler_length/2; coupler_length/2; coupler_length/2+taper_length];
+y= [waveguide_width/2; taper_width/2; -taper_width/2; -waveguide_width/2] + separation*1.5;
+V=[x,y];
+set("vertices",V);
+#output 2
+addpoly;
+set("name","output2");
+set("material","my_SiN");
+set("x",0);
+set("y",0);
+set("z",0);
+set("z span",z_span);
+x= [coupler_length/2+taper_length; coupler_length/2; coupler_length/2; coupler_length/2+taper_length];
+y= [waveguide_width/2; taper_width/2; -taper_width/2; -waveguide_width/2] + separation*0.5;
+V=[x,y];
+set("vertices",V);
+#output 3
+addpoly;
+set("name","output3");
+set("material","my_SiN");
+set("x",0);
+set("y",0);
+set("z",0);
+set("z span",z_span);
+x= [coupler_length/2+taper_length; coupler_length/2; coupler_length/2; coupler_length/2+taper_length];
+y= [waveguide_width/2; taper_width/2; -taper_width/2; -waveguide_width/2] - separation*0.5;
+V=[x,y];
+set("vertices",V);
+#output 4
+addpoly;
+set("name","output4");
+set("material","my_SiN");
+set("x",0);
+set("y",0);
+set("z",0);
+set("z span",z_span);
+x= [coupler_length/2+taper_length; coupler_length/2; coupler_length/2; coupler_length/2+taper_length];
+y= [waveguide_width/2; taper_width/2; -taper_width/2; -waveguide_width/2] - separation*1.5;
+V=[x,y];
+set("vertices",V);
+
+# add iput waveguide region
+addrect;
+set("name","input waveguide1");
+set("material","my_SiN");
+set("x",-coupler_length/2-taper_length-waveguide_length/2);
+set("x span",waveguide_length);
+set("y",separation*1.5);
+set("y span",waveguide_width);
+set("z",0);
+set("z span",z_span);
+addrect;
+set("name","input waveguide2");
+set("material","my_SiN");
+set("x",-coupler_length/2-taper_length-waveguide_length/2);
+set("x span",waveguide_length);
+set("y",separation*0.5);
+set("y span",waveguide_width);
+set("z",0);
+set("z span",z_span);
+addrect;
+set("name","input waveguide3");
+set("material","my_SiN");
+set("x",-coupler_length/2-taper_length-waveguide_length/2);
+set("x span",waveguide_length);
+set("y",-separation*0.5);
+set("y span",waveguide_width);
+set("z",0);
+set("z span",z_span);
+addrect;
+set("name","input waveguide4");
+set("material","my_SiN");
+set("x",-coupler_length/2-taper_length-waveguide_length/2);
+set("x span",waveguide_length);
+set("y",-separation*1.5);
+set("y span",waveguide_width);
+set("z",0);
+set("z span",z_span);
+
+# add output waveguide region
+addrect;
+set("name","output waveguide1");
+set("material","my_SiN");
+set("x",coupler_length/2+taper_length+waveguide_length/2);
+set("x span",waveguide_length);
+set("y",separation*1.5);
+set("y span",waveguide_width);
+set("z",0);
+set("z span",z_span);
+addrect;
+set("name","output waveguide2");
+set("material","my_SiN");
+set("x",coupler_length/2+taper_length+waveguide_length/2);
+set("x span",waveguide_length);
+set("y",separation*0.5);
+set("y span",waveguide_width);
+set("z",0);
+set("z span",z_span);
+addrect;
+set("name","output waveguide3");
+set("material","my_SiN");
+set("x",coupler_length/2+taper_length+waveguide_length/2);
+set("x span",waveguide_length);
+set("y",-separation*0.5);
+set("y span",waveguide_width);
+set("z",0);
+set("z span",z_span);
+addrect;
+set("name","output waveguide3");
+set("material","my_SiN");
+set("x",coupler_length/2+taper_length+waveguide_length/2);
+set("x span",waveguide_length);
+set("y",-separation*1.5);
+set("y span",waveguide_width);
+set("z",0);
+set("z span",z_span);
+
+
+################################################################################################
+###################################### define EME settings #####################################
+
+z_total=10e-6;
+addeme;
+select("EME");
+set("x",0);
+set("y",0);
+set("y span",coupler_width+add_y);
+set("z",0);
+set("z span",z_total);
+# set cell properties
+set("x min",-coupler_length/2-taper_length);
+set("allow custom eigensolver settings",1);
+set("number of cell groups",3);
+set("group spans",[taper_length; coupler_length; taper_length]);
+set("cells",[10; 1; 10]);
+set("subcell method",[1; 0; 1]);   # 0 = none,  1 = CVCS
+set("modes",[25; 30; 25]);
+set("y min bc","Metal");
+set("y max bc","Metal");
+set("z min bc","Symmetric");
+set("z max bc","Metal");
+set("background material","SiO2 (Glass) - Palik");
+# set EME ports
+N = 1.5;
+
+#addemeport;
+setnamed("::model::EME::Ports::port_1","y",separation*1.5);
+setnamed("::model::EME::Ports::port_1","y span",taper_width*N);
+setnamed("::model::EME::Ports::port_1","port location","left");
+setnamed("::model::EME::Ports::port_1","use full simulation span",0);  # unselect checkbox
+
+setnamed("::model::EME::Ports::port_2","y",separation*0.5);
+setnamed("::model::EME::Ports::port_2","y span",taper_width*N);
+setnamed("::model::EME::Ports::port_2","port location","left");
+setnamed("::model::EME::Ports::port_2","use full simulation span",0);  # unselect checkbox  
+
+addemeport;
+setnamed("::model::EME::Ports::port_3","y",-separation*0.5);
+setnamed("::model::EME::Ports::port_3","y span",taper_width*N);
+setnamed("::model::EME::Ports::port_3","port location","left");
+setnamed("::model::EME::Ports::port_3","use full simulation span",0);  # unselect checkbox
+
+addemeport;
+setnamed("::model::EME::Ports::port_4","y",-separation*1.5);
+setnamed("::model::EME::Ports::port_4","y span",taper_width*N);
+setnamed("::model::EME::Ports::port_4","port location","left");
+setnamed("::model::EME::Ports::port_4","use full simulation span",0);  # unselect checkbox
+
+# set EME ports
+addemeport;
+setnamed("::model::EME::Ports::port_5","y",separation*1.5);
+setnamed("::model::EME::Ports::port_5","y span",taper_width*N);
+setnamed("::model::EME::Ports::port_5","port location","right");
+setnamed("::model::EME::Ports::port_5","use full simulation span",0);  # unselect checkbox
+addemeport;
+setnamed("::model::EME::Ports::port_6","y",separation*0.5);
+setnamed("::model::EME::Ports::port_6","y span",taper_width*N);
+setnamed("::model::EME::Ports::port_6","port location","right");
+setnamed("::model::EME::Ports::port_6","use full simulation span",0);  # unselect checkbox
+addemeport;
+setnamed("::model::EME::Ports::port_7","y",-separation*0.5);
+setnamed("::model::EME::Ports::port_7","y span",taper_width*N);
+setnamed("::model::EME::Ports::port_7","port location","right");
+setnamed("::model::EME::Ports::port_7","use full simulation span",0);  # unselect checkbox
+addemeport;
+setnamed("::model::EME::Ports::port_8","y",-separation*1.5);
+setnamed("::model::EME::Ports::port_8","y span",taper_width*N);
+setnamed("::model::EME::Ports::port_8","port location","right");
+setnamed("::model::EME::Ports::port_8","use full simulation span",0);  # unselect checkbox
+
+
+addemeprofile;
+set("name","field_monitor");
+set("monitor type",3);  # 2D z-normal
+set("x",0);
+set("x span",coupler_length+taper_length*2);
+set("y",0);
+set("y span",coupler_width);
+#addindex;
+#set("x",0);
+#set("x span",coupler_length+taper_length*2);
+#set("y span",coupler_width);
+
+
+
+###########################################
+############################# Mesh
+addmesh;
+set("name","mesh_mmi");
+## set dimension
+set("x",0);
+set("x span",coupler_length+taper_length*2);
+set("y",0);
+set("y span",coupler_width);
+set("z",0);
+set("z span",z_span);
+#set("based on a structure",1);
+#set("structure","MMI");
+# enable in X direction and disable in Y,Z directions
+set("override x mesh",0);
+set("override y mesh",1);
+set("override z mesh",1);
+# restrict mesh by defining maximum step size
+set("set maximum mesh step",1);
+set("dy",0.04e-6);
+set("dz",0.04e-6);
