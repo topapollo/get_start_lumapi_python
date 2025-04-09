@@ -1,0 +1,31 @@
+
+E = getresult("field_monitor","field profile");
+x = E.x;
+y = E.y;
+Ex = pinch(E.Ex);
+Ey = pinch(E.Ey);
+Ez = pinch(E.Ez);
+save(filename);
+
+
+
+
+
+
+# set propagation sweep settings
+setemeanalysis("propagation sweep",1);
+setemeanalysis("parameter","group span 2");
+setemeanalysis("start",6e-6);
+setemeanalysis("stop",8e-6);
+setemeanalysis("number of points",30);
+
+# run propagation sweep tool
+emesweep;
+filename="own_mmi_taper_"+num2str(taper_length*1e6);
+
+# get propagation sweep result
+S = getemesweep('S');
+s21 =S.s21;
+s31 =S.s31;
+
+matlabsave(filename,s21,s31,x,y,Ex,Ey,Ez);
