@@ -305,6 +305,8 @@ set("y",0);
 set("y span",coupler_width*3);
 set("z",z_span/2);
 
+addemeindex;
+set("name","index_monitor");
 
 
 

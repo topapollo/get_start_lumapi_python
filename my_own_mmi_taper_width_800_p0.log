@@ -1,0 +1,110 @@
+Ansys Lumerical 2024 R1 Eigenmode Expansion Solver Version 7.23.3633 (Windows 64bit)
+ expires (month/day/year): 12/31/2035
+using config file: Ansys Licensing set with ANSYSLMD_LICENSE_FILE
+license host: 1055@localhost
+current time: 周四 4月 10 03:07:36 2025
+Running on host: Bryan
+All processes are communicating and ready to proceed to simulation...
+Running lms file: C:\Program Files\Lumerical\v241\bin\eme-engine-msmpi.exe -t 22 -remote -shared-solve-license QU5TWVNfTElDRU5TSU5HX0NPTlRFWFRfREFUQT08QU5TWVNfTElDRU5TSU5HX0NPTlRFWFRfREFUQT48SUQ+MDkyNjBlODItZWZlNS00ZDNjLWEyN2YtOGI1MDRkOTk3M2YwPC9JRD48VFlQRT5IUENfUEFSQU1FVFJJQzwvVFlQRT48TkFNRT5IUEMgUGFyYW1ldHJpYzwvTkFNRT48SEFORExFUj41MTcxN0BCcnlhbjwvSEFORExFUj48L0FOU1lTX0xJQ0VOU0lOR19DT05URVhUX0RBVEE+Cg== C:/Users/Ryan/OneDrive - MSFT/Codes/MMI_own/my_own_mmi_taper_width_800.lms
+All processes are communicating and ready to proceed to simulation...
+Running MODE Simulation
+Starting simulation
+Starting meshing
+Simulation size in gridpoints: 1 x 170 x 80
+Refined 0 mesh cells (0%)
+Completed meshing!
+Meshing complete in 0.015625 seconds of CPU time
+Starting meshing
+Simulation size in gridpoints: 1 x 170 x 80
+Refined 0 mesh cells (0%)
+Completed meshing!
+Meshing complete in 0.046875 seconds of CPU time
+Starting meshing
+Simulation size in gridpoints: 1 x 170 x 80
+Refined 0 mesh cells (0%)
+Completed meshing!
+Meshing complete in 0.15625 seconds of CPU time
+Starting meshing
+Simulation size in gridpoints: 1 x 170 x 80
+Refined 0 mesh cells (0%)
+Completed meshing!
+Meshing complete in 0.015625 seconds of CPU time
+Starting meshing
+Simulation size in gridpoints: 1 x 170 x 80
+Refined 0 mesh cells (0%)
+Completed meshing!
+Meshing complete in 0 seconds of CPU time
+Starting meshing
+Simulation size in gridpoints: 1 x 170 x 80
+Refined 0 mesh cells (0%)
+Completed meshing!
+Meshing complete in 0 seconds of CPU time
+Starting meshing
+Simulation size in gridpoints: 1 x 170 x 80
+Refined 0 mesh cells (0%)
+Completed meshing!
+Meshing complete in 0 seconds of CPU time
+Starting meshing
+Simulation size in gridpoints: 1 x 170 x 80
+Refined 0 mesh cells (0%)
+Completed meshing!
+Meshing complete in 0.046875 seconds of CPU time
+Starting meshing
+Simulation size in gridpoints: 1 x 170 x 80
+Refined 0 mesh cells (0%)
+Completed meshing!
+Meshing complete in 0.046875 seconds of CPU time
+All processes are communicating and ready to proceed to simulation...
+Starting meshing
+Simulation size in gridpoints: 1 x 170 x 80
+Refined 0 mesh cells (0%)
+Completed meshing!
+Meshing complete in 0.0625 seconds of CPU time
+Starting meshing
+Simulation size in gridpoints: 1 x 170 x 80
+Refined 0 mesh cells (0%)
+Completed meshing!
+Meshing complete in 0.125 seconds of CPU time
+Starting meshing
+Simulation size in gridpoints: 1 x 170 x 80
+Refined 0 mesh cells (0%)
+Completed meshing!
+Meshing complete in 0 seconds of CPU time
+Starting meshing
+Simulation size in gridpoints: 1 x 57 x 34
+Refined 0 mesh cells (0%)
+Completed meshing!
+Meshing complete in 0.03125 seconds of CPU time
+Starting meshing
+Simulation size in gridpoints: 1 x 57 x 34
+Refined 0 mesh cells (0%)
+Completed meshing!
+Meshing complete in 0 seconds of CPU time
+Starting meshing
+Simulation size in gridpoints: 1 x 57 x 34
+Refined 0 mesh cells (0%)
+Completed meshing!
+Meshing complete in 0 seconds of CPU time
+Starting meshing
+Simulation size in gridpoints: 1 x 57 x 80
+Refined 0 mesh cells (0%)
+Completed meshing!
+Meshing complete in 0.0625 seconds of CPU time
+Starting meshing
+Simulation size in gridpoints: 1 x 57 x 80
+Refined 0 mesh cells (0%)
+Completed meshing!
+Meshing complete in 0 seconds of CPU time
+Starting meshing
+Simulation size in gridpoints: 1 x 57 x 80
+Refined 0 mesh cells (0%)
+Completed meshing!
+Meshing complete in 0 seconds of CPU time
+EME simulation time (s): 3762.99
+Number of processes: 16
+Time to normalize fields and orthogonalize degenerate modes:  3.0949
+Time to calculate modes:  2760.45
+Time to calculate overlaps: 88.7628
+Total communication time: 910.7
+Simulation completed successfully at: 周四 4月 10 04:10:22 2025
+Overall EME run time (s): 3767.09
