@@ -13,7 +13,7 @@ import lumapi
 print("Current directory:", os.getcwd())
 print("Files in directory:", os.listdir())
 
-taper_widths = np.linspace(0.8e-6,0.9e-6,2)  # 0.5 um
+taper_widths = np.linspace(0.54e-6,1.14e-6,13)  # 0.5 um
 
 for width in taper_widths:
     print("Taper width:", width)
@@ -48,7 +48,7 @@ for width in taper_widths:
     mmi.setnamed("::model::MMI::output2", "vertices", V_output2)
 
 
-    mmi.save(f"my_own_mmi_taper_width_{width*1e9}")
+    
 
     # part2: run the simulation
     mmi.run()
@@ -71,7 +71,7 @@ for width in taper_widths:
     Emag = np.sqrt(np.abs(Ex)**2 + np.abs(Ey)**2 + np.abs(Ez)**2)
     print("Ex shape:", Ex.shape)
 
-    index_data = mmi.getresult("index_monitor","index")
+    index_data = mmi.getresult("index_monitor","index profile")
     x_index = index_data['x']   
     
     y_index = index_data['y']
@@ -90,6 +90,7 @@ for width in taper_widths:
     s=mmi.getemesweep('S')
     print("EME sweep completed.")
     print("S-parameters shape:", s['s21'].shape)
+    mmi.save(f"my_own_mmi_taper_width_{width*1e9}")
     mmi.close()
     
 
