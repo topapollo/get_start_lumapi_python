@@ -3,8 +3,8 @@ import os
 import sys
 import matplotlib.pyplot as plt
 from scipy.constants import c
-import scipy.io as sio  # 用于保存 MATLAB 兼容文件
-import pickle  # 用于保存 Python 对象
+import scipy.io as sio  
+import pickle  
 
 # add Lumerical API path
 #sys.path.append(r"C:\Program Files\Lumerical\v241\api\python\\")
@@ -51,9 +51,9 @@ print("Value of s:", s)
 s21=s['s21']
 length=s['group_span_2']
 s51_abs = np.abs(s21)
-s51_phase = np.angle(s21, deg=True)  # 相位转换为度
+s51_phase = np.angle(s21, deg=True)  
 sio.savemat('results_matlab.mat', {'length': length, 's21': s21,'Emag':Emag, 'x': x, 'y': y,'E':E})
 
 
 
-print("数据已保存，并完成初步分析")
+print("All the data has been saved. mission accomplished.")
