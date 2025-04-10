@@ -1,0 +1,336 @@
+deleteall;
+
+
+if (materialexists("my_SiN")){deletematerial("my_SiN");}
+if(materialexists("Thermal_Oxide")){deletematerial("Thermal_Oxide");}
+if(materialexists("STI_oxide")){deletematerial("STI_oxide");}
+
+############### Define the structure ###############
+# geometrical parameters
+
+wavelength=785e-9;
+wavelength_span=0e-9;
+frequency_points=1;
+
+coupler_width =1.5e-6;
+coupler_length = 3.05e-6;
+separation = coupler_width/2;
+taper_length = 2.0e-6;
+waveguide_width = 0.38e-6;
+taper_width = waveguide_width*1.5;
+
+T_sin = 0.35e-6;
+waveguide_length = 1.5e-6;
+margin = (coupler_width-separation-taper_width)/2;
+
+add_y =10e-6;
+
+print(coupler_width);
+
+#Layer thicknesses
+T_si=3e-6;
+T_box=5e-6;
+T_ox_top=5e-6;
+
+L = coupler_length+taper_length*2+waveguide_length*2;
+Y_span = coupler_width+add_y;
+mesh_accuracy=1;
+
+#######################################################################
+# add materials
+#######################################################################
+# user defined materials
+data = readdata("SiN_n_k.txt");
+lam = data(:,1);
+n = data(:,2);
+k = data(:,3);
+# convert the data from index into eps
+e_r=n*n-k*k; # real part of relative permittivity
+e_i=2*n*k; # imaginary part of relative permittivity
+e_rel=e_r+e_i*1i;# create example relative permittivity vector
+# convert lambda into f
+nm=10^-9;
+lambda = lam*nm;
+f=c/lambda; 
+sampledData = [f,e_rel]; # collect f and eps in one matrix
+mymaterial = addmaterial("Sampled data");
+setmaterial(mymaterial, "name", "my_SiN");
+setmaterial("my_SiN", "max coefficients",6); # set the number of coefficients
+setmaterial("my_SiN", "tolerance", 1e-2);
+setmaterial("my_SiN","sampled data",sampledData); # load the sampled data matrix
+setmaterial("my_SiN","color", [0.2; 0.6; 0.8; 0.3]);
+
+
+
+data = readdata("Thermal_oxide.txt");
+lam = data(:,1);
+n = data(:,2);
+k = 0;
+# convert the data from index into eps
+e_r=n*n-k*k; # real part of relative permittivity
+e_i=2*n*k; # imaginary part of relative permittivity
+e_rel=e_r+e_i*1i;# create example relative permittivity vector
+# convert lambda into f
+nm=10^-9;
+lambda = lam*nm;
+f=c/lambda; 
+sampledData = [f,e_rel]; # collect f and eps in one matrix
+mymaterial = addmaterial("Sampled data");
+setmaterial(mymaterial, "name", "Thermal_Oxide");
+setmaterial("Thermal_Oxide", "max coefficients",6); # set the number of coefficients
+setmaterial("Thermal_Oxide", "tolerance", 1e-2);
+setmaterial("Thermal_Oxide","sampled data",sampledData); # load the sampled data matrix
+setmaterial("Thermal_Oxide","color", [0.7; 0.5; 0.2; 0.3]);
+
+
+data = readdata("STI_oxide.txt");
+lam = data(:,1);
+n = data(:,2);
+k = 0;
+# convert the data from index into eps
+e_r=n*n-k*k; # real part of relative permittivity
+e_i=2*n*k; # imaginary part of relative permittivity
+e_rel=e_r+e_i*1i;# create example relative permittivity vector
+# convert lambda into f
+nm=10^-9;
+lambda = lam*nm;
+f=c/lambda; 
+sampledData = [f,e_rel]; # collect f and eps in one matrix
+mymaterial = addmaterial("Sampled data");
+setmaterial(mymaterial, "name", "STI_oxide");
+setmaterial("STI_oxide", "max coefficients",6); # set the number of coefficients
+setmaterial("STI_oxide", "tolerance", 1e-2);
+setmaterial("STI_oxide","sampled data",sampledData); # load the sampled data matrix
+setmaterial("STI_oxide","color", [0.3; 0.8; 0.8; 0.5]);
+
+
+
+
+
+#######################################################################
+# draw geometrical structure
+#######################################################################
+
+
+ ######################################################################
+    # Adding stack Geometry
+    ######################################################################
+addstructuregroup;
+set("name","stack");
+set("x",0);
+set("y",0);
+set("z",0);
+addrect;
+set("name","Si");
+set("x min",-L/2);
+set("x max",L/2);
+set("y",0);
+set("z min", -T_si-T_box-T_sin/2);
+set("z max", -T_box-T_sin/2);
+set("y span",Y_span);
+set("material","Si (Silicon) - Palik");
+addtogroup("stack");
+addrect;
+set("name","BOX");
+set("x min",-L/2);
+set("x max",L/2);
+set("y",0);
+set("z min", -T_box-T_sin/2);
+set("z max", -T_sin/2);
+set("y span",Y_span);
+set("material","Thermal_Oxide");
+addtogroup("stack");
+addrect;
+set("name","OX_top");
+set("x min",-L/2);
+set("x max",L/2);
+set("y",0);
+set("z min",-T_sin/2);
+set("z max", T_ox_top);
+set("y span",Y_span);
+set("material","STI_oxide");
+set("override mesh order from material database",1);
+set("mesh order",3);
+set("render type","wireframe");
+addtogroup("stack");
+
+
+ ######################################################################
+    # Adding MMI Geometry
+    ######################################################################
+addstructuregroup;
+set("name","MMI");
+set("x",0);
+set("y",0);
+set("z",0);
+# add MMI coupling region
+addrect;
+set("name","MMI_core");
+set("material","my_SiN");
+set("x",0);
+set("x span",coupler_length);
+set("y",0);
+set("y span",coupler_width);
+set("z",0);
+set("z span",T_sin);
+addtogroup("MMI");
+# add tapered regions for input ports
+# input1
+addpoly;
+set("name","input1");
+set("material","my_SiN");
+set("x",0);
+set("y",0);
+set("z",0);
+set("z span",T_sin);
+x= [-coupler_length/2-taper_length; -coupler_length/2; -coupler_length/2; -coupler_length/2-taper_length];
+y= [waveguide_width/2; taper_width/2; -taper_width/2; -waveguide_width/2];
+V=[x,y];
+set("vertices",V);
+addtogroup("MMI");
+
+
+
+
+# add tapered regions for output ports
+# output 1
+addpoly;
+set("name","output1");
+set("material","my_SiN");
+set("x",0);
+set("y",0);
+set("z",0);
+set("z span",T_sin);
+x= [coupler_length/2+taper_length; coupler_length/2; coupler_length/2; coupler_length/2+taper_length];
+y= [waveguide_width/2; taper_width/2; -taper_width/2; -waveguide_width/2] + separation*0.5;
+V=[x,y];
+set("vertices",V);
+addtogroup("MMI");
+#output 2
+addpoly;
+set("name","output2");
+set("material","my_SiN");
+set("x",0);
+set("y",0);
+set("z",0);
+set("z span",T_sin);
+x= [coupler_length/2+taper_length; coupler_length/2; coupler_length/2; coupler_length/2+taper_length];
+y= [waveguide_width/2; taper_width/2; -taper_width/2; -waveguide_width/2] - separation*0.5;
+V=[x,y];
+set("vertices",V);
+addtogroup("MMI");
+
+# add input waveguide region
+addrect;
+set("name","input waveguide1");
+set("material","my_SiN");
+set("x",-coupler_length/2-taper_length-waveguide_length/2);
+set("x span",waveguide_length);
+set("y",0);
+set("y span",waveguide_width);
+set("z",0);
+set("z span",T_sin);
+addtogroup("MMI");
+
+# add output waveguide region
+addrect;
+set("name","output waveguide1");
+set("material","my_SiN");
+set("x",coupler_length/2+taper_length+waveguide_length/2);
+set("x span",waveguide_length);
+set("y",separation*0.5);
+set("y span",waveguide_width);
+set("z",0);
+set("z span",T_sin);
+addtogroup("MMI");
+addrect;
+set("name","output waveguide2");
+set("material","my_SiN");
+set("x",coupler_length/2+taper_length+waveguide_length/2);
+set("x span",waveguide_length);
+set("y",-separation*0.5);
+set("y span",waveguide_width);
+set("z",0);
+set("z span",T_sin);
+addtogroup("MMI");
+
+################################################################################################
+###################################### define EME settings #####################################
+
+z_total=10e-6;
+
+addfdtd;
+set("simulation time",2000e-15);
+set("x",0);
+set("x span",coupler_length+2*taper_length+2e-6);
+set("y",0);
+set("y span",4*coupler_width);
+set("z",0);
+set("z span",4e-6);
+set("y min bc","Metal");
+set("y max bc","Metal");
+set("z min bc","Metal");
+set("z max bc","Metal");
+set("mesh accuracy",mesh_accuracy);
+
+
+
+addmesh;
+set("name","mesh_mmi");
+## set dimension
+set("x",0);
+set("x span",coupler_length+taper_length*2+4e-6);
+set("y",0);
+set("y span",coupler_width);
+set("z",0);
+set("z span",T_sin);
+# enable in X direction and disable in Y,Z directions
+set("override x mesh",1);
+set("override y mesh",1);
+set("override z mesh",1);
+# restrict mesh by defining maximum step size
+set("set maximum mesh step",1);
+set("dx",0.025e-6);
+set("dy",0.01e-6);
+set("dz",0.01e-6);
+
+setglobalsource("center wavelength", wavelength);
+setglobalsource("wavelength span", wavelength_span);
+setglobalmonitor("frequency points",frequency_points);
+
+addpower;
+set("simulation type","3D");
+set("monitor type","2D Z-normal");
+set("name","field_monitor");
+set("x",0);
+set("x span",coupler_length+taper_length*2+1.5e-6);
+set("y",0);
+set("y span",coupler_width*3);
+set("z",0);
+set("override global monitor settings",1);
+set("use wavelength spacing",1);
+set("frequency points",1);
+
+
+
+addport;
+set("x",-coupler_length/2-taper_length-0.5e-6);
+set("mode selection","fundamental TE mode");
+
+
+addport;
+set("x",coupler_length/2+taper_length+0.5e-6);
+set("mode selection","fundamental TE mode");
+set("y min",0);
+set("y max",2*coupler_width);
+
+
+addport;
+set("x",coupler_length/2+taper_length+0.5e-6);
+set("mode selection","fundamental TE mode");
+set("y max",0);
+set("y min",-2*coupler_width);
+
+
+
+
